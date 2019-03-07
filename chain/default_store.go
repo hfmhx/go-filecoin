@@ -373,6 +373,11 @@ func (store *DefaultStore) Head() types.TipSet {
 	return store.head
 }
 
+// BlockHeight returns the height of the head
+func (store *DefaultStore) BlockHeight() (uint64, error) {
+	return store.Head().Height()
+}
+
 // LatestState returns the state associated with the latest chain head.
 func (store *DefaultStore) LatestState(ctx context.Context) (state.Tree, error) {
 	h := store.Head()
