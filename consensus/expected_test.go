@@ -98,8 +98,13 @@ func makeSomeBlocks(ctx context.Context, require *require.Assertions, pTipSet ty
 	addrs := make([]address.Address, len(addrNames))
 
 	for i, name := range addrNames {
-		addrs[i] = address.MakeTestAddress(name)
-		owner := address.MakeTestAddress(fmt.Sprintf("%s%s", name, "Owner"))
+		var err error
+		addrs[i], err = address.NewActorAddress([]byte(name))
+		require.NoError(err)
+
+		owner, err := address.NewActorAddress([]byte(fmt.Sprintf("%s%s", name, "Owner")))
+		require.NoError(err)
+
 		miner := testhelpers.RequireNewMinerActor(require, vms, addrs[i], owner, []byte{}, 10000, testhelpers.RequireRandomPeerID(), types.NewZeroAttoFIL())
 		tree.SetActor(ctx, addrs[i], miner)
 	}

@@ -16,7 +16,6 @@ import (
 	car "gx/ipfs/QmUGpiTCKct5s1F7jaAnY9KJmoo7Qm1R2uhSjq5iHDSUMn/go-car"
 	"gx/ipfs/QmVmDhyTTUcQXFD1rRQ64fGLMSAoaQvNH3hwuaCFAPq2hy/errors"
 
-	"github.com/filecoin-project/go-filecoin/address"
 	"github.com/filecoin-project/go-filecoin/api"
 	"github.com/filecoin-project/go-filecoin/config"
 	"github.com/filecoin-project/go-filecoin/consensus"
@@ -91,7 +90,7 @@ func (nd *nodeDaemon) Init(ctx context.Context, opts ...api.DaemonInitOpt) error
 
 	initopts = append(initopts, node.AutoSealIntervalSecondsOpt(cfg.AutoSealIntervalSeconds))
 
-	if cfg.WithMiner != (address.Address{}) {
+	if !cfg.WithMiner.Empty() {
 		newConfig := rep.Config()
 		newConfig.Mining.MinerAddress = cfg.WithMiner
 		if err := rep.ReplaceConfig(newConfig); err != nil {
@@ -99,7 +98,7 @@ func (nd *nodeDaemon) Init(ctx context.Context, opts ...api.DaemonInitOpt) error
 		}
 	}
 
-	if cfg.DefaultAddress != (address.Address{}) {
+	if !cfg.DefaultAddress.Empty() {
 		newConfig := rep.Config()
 		newConfig.Wallet.DefaultAddress = cfg.DefaultAddress
 		if err := rep.ReplaceConfig(newConfig); err != nil {

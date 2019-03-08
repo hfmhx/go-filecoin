@@ -478,7 +478,7 @@ func (td *TestDaemon) CreateMinerAddr(peer *TestDaemon, fromAddr string) address
 		miner := td.RunSuccess("miner", "create", "--from", fromAddr, "--price", "0", "--limit", "300", "100", "20")
 		addr, err := address.NewFromString(strings.Trim(miner.ReadStdout(), "\n"))
 		require.NoError(err)
-		require.NotEqual(addr, address.Address{})
+		require.NotEqual(addr, address.Undef)
 		minerAddr = addr
 		wg.Done()
 	}()

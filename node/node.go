@@ -545,7 +545,7 @@ func (node *Node) setupHeartbeatServices(ctx context.Context) error {
 		// if there is no configured miner address, simply send a zero
 		// address across the wire.
 		if err != nil {
-			return address.Address{}
+			return address.Undef
 		}
 		return addr
 	}
@@ -719,8 +719,8 @@ func (node *Node) addNewlyMinedBlock(ctx context.Context, b *types.Block) {
 // the node.
 func (node *Node) miningAddress() (address.Address, error) {
 	addr := node.Repo.Config().Mining.MinerAddress
-	if addr == (address.Address{}) {
-		return address.Address{}, ErrNoMinerAddress
+	if addr.Empty() {
+		return address.Undef, ErrNoMinerAddress
 	}
 
 	return addr, nil
@@ -902,7 +902,7 @@ func (node *Node) StartMining(ctx context.Context) error {
 func (node *Node) getLastUsedSectorID(ctx context.Context, minerAddr address.Address) (uint64, error) {
 	rets, methodSignature, err := node.PorcelainAPI.MessageQuery(
 		ctx,
-		address.Address{},
+		address.Undef,
 		minerAddr,
 		"getLastUsedSectorID",
 	)
@@ -1074,12 +1074,12 @@ func (node *Node) saveMinerConfig(minerAddr address.Address, signerAddr address.
 func (node *Node) miningOwnerAddress(ctx context.Context, miningAddr address.Address) (address.Address, error) {
 	res, _, err := node.PorcelainAPI.MessageQuery(
 		ctx,
-		address.Address{},
+		address.Undef,
 		miningAddr,
 		"getOwner",
 	)
 	if err != nil {
-		return address.Address{}, errors.Wrap(err, "failed to getOwner")
+		return address.Undef, errors.Wrap(err, "failed to getOwner")
 	}
 
 	return address.NewFromBytes(res[0])
@@ -1109,7 +1109,7 @@ func (node *Node) getMinerActorPubKey() ([]byte, error) {
 	addr := node.Repo.Config().Mining.MinerAddress
 
 	// this is expected if there is no miner
-	if (addr == address.Address{}) || !node.Wallet.HasAddress(addr) {
+	if (addr == address.Undef) || !node.Wallet.HasAddress(addr) {
 		return nil, nil
 	}
 	return node.Wallet.GetPubKeyForAddress(addr)

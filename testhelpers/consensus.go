@@ -154,7 +154,7 @@ func ApplyTestMessage(st state.Tree, store vm.StorageMap, msg *types.Message, bh
 	}
 
 	ta := newTestApplier()
-	return newMessageApplier(smsg, ta, st, store, bh, address.Address{})
+	return newMessageApplier(smsg, ta, st, store, bh, address.Undef)
 }
 
 // ApplyTestMessageWithGas uses the TestBlockRewarder but the default SignedMessageValidator

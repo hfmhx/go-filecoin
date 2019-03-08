@@ -447,7 +447,7 @@ func TestNode_getMinerOwnerPubKey(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Nil(t, pkey)
 
-	err = tnode.saveMinerConfig(minerOwnerAddr, address.Address{})
+	err = tnode.saveMinerConfig(minerOwnerAddr, address.Undef)
 	assert.NoError(t, err)
 
 	pkey, err = tnode.getMinerActorPubKey()
