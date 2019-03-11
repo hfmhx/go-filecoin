@@ -123,7 +123,6 @@ type Node struct {
 	// Network Fields
 	BlockSub     pubsub.Subscription
 	MessageSub   pubsub.Subscription
-	Ping         *ping.PingService
 	HelloSvc     *hello.Handler
 	Bootstrapper *net.Bootstrapper
 	OnlineStore  *hamt.CborIpldStore
@@ -415,7 +414,7 @@ func (nc *Config) Build(ctx context.Context) (*Node, error) {
 		MsgQueryer:   msg.NewQueryer(nc.Repo, fcWallet, chainReader, &cstOffline, bs),
 		MsgSender:    msg.NewSender(fcWallet, chainReader, msgPool, consensus.NewOutboundMessageValidator(), fsub.Publish),
 		MsgWaiter:    msg.NewWaiter(chainReader, bs, &cstOffline),
-		Network:      net.New(peerHost, pubsub.NewPublisher(fsub), pubsub.NewSubscriber(fsub), net.NewRouter(router), bandwidthTracker),
+		Network:      net.New(peerHost, pubsub.NewPublisher(fsub), pubsub.NewSubscriber(fsub), net.NewRouter(router), bandwidthTracker, pinger),
 		SigGetter:    mthdsig.NewGetter(chainReader),
 		Wallet:       fcWallet,
 	}))
@@ -435,7 +434,6 @@ func (nc *Config) Build(ctx context.Context) (*Node, error) {
 		MsgPool:      msgPool,
 		OfflineMode:  nc.OfflineMode,
 		PeerHost:     peerHost,
-		Ping:         pinger,
 		Repo:         nc.Repo,
 		Wallet:       fcWallet,
 		blockTime:    nc.BlockTime,

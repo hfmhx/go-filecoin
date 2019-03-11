@@ -2,6 +2,7 @@ package plumbing
 
 import (
 	"context"
+	"time"
 
 	"gx/ipfs/QmR8BauakNcBa3RbE4nbQu76PDiJgoQgz8AJdhJuiU4TAw/go-cid"
 	pstore "gx/ipfs/QmRhFARzTHcFh8wUxwN5KvyTGq73FLC65EfFAhz8Ng7aGb/go-libp2p-peerstore"
@@ -206,6 +207,11 @@ func (api *API) NetworkGetPeerID() peer.ID {
 // NetworkFindProvidersAsync issues a findProviders query to the filecoin network content router.
 func (api *API) NetworkFindProvidersAsync(ctx context.Context, key cid.Cid, count int) <-chan pstore.PeerInfo {
 	return api.network.FindProvidersAsync(ctx, key, count)
+}
+
+// NetworkPing sends echo request packets over the network.
+func (api *API) NetworkPing(ctx context.Context, pid peer.ID) (<-chan time.Duration, error) {
+	return api.network.Ping(ctx, pid)
 }
 
 // SignBytes uses private key information associated with the given address to sign the given bytes.
