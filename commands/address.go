@@ -98,7 +98,7 @@ var addrsLookupCmd = &cmds.Command{
 			return err
 		}
 
-		v, err := GetAPI(env).Address().Addrs().Lookup(req.Context, addr)
+		v, err := GetPorcelainAPI(env).MinerGetPeerID(req.Context, addr)
 		if err != nil {
 			return err
 		}
