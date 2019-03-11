@@ -8,7 +8,6 @@ type API interface {
 	Client() Client
 	Daemon() Daemon
 	Dag() Dag
-	ID() ID
 	Log() Log
 	Miner() Miner
 	Mining() Mining
